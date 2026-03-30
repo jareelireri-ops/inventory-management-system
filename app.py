@@ -1,13 +1,16 @@
 from flask import Flask, jsonify, request
 
+from external_api import fetch_product_by_barcode 
+
 app = Flask(__name__)
 
-#THE DATA THAT WE'LL BE WORKING WITH
+# THE DATA T0 WORKING WITH
 inventory = [
     {"id": 1, "name": "Passion Fruit", "quantity": 80, "price": 1.49, "barcode": "1234567890"},
     {"id": 2, "name": "Milk", "quantity": 60, "price": 0.89, "barcode": "0987654321"}
 ]
-# Helper function to find an item by ID 
+
+# the Helper function to find item by ID 
 def find_item(item_id):
     """Find an inventory item by ID."""
     return next((item for item in inventory if item["id"] == item_id), None)
@@ -22,6 +25,32 @@ def index():
 def get_inventory():
     """Return all inventory items."""
     return jsonify(inventory), 200
+
+#the EXTERNAL API ROUTE FOR "EXCELLED" STATUS
+@app.route('/inventory/lookup/<barcode>', methods=['GET'])
+def lookup_and_add(barcode):
+    """Fetch product from OpenFoodFacts and add it to the inventory array."""
+    
+    #Fetch data using our external script
+    product_data = fetch_product_by_barcode(barcode)
+    
+    if not product_data:
+        return jsonify({"error": "Product not found in OpenFoodFacts"}), 404
+        
+    for item in inventory:
+        if item['barcode'] == barcode:
+            return jsonify({"message": "Item already in inventory", "item": item}), 200
+
+    # Add new item to array
+    new_item = {
+        "id": inventory[-1]["id"] + 1 if inventory else 1,
+        "name": product_data["name"],
+        "quantity": 0,  
+        "price": 0.0,   
+        "barcode": barcode
+    }
+    inventory.append(new_item)
+    return jsonify({"message": "Successfully fetched and added", "item": new_item}), 201
 
 @app.route('/inventory/<int:id>', methods=['GET'])
 def get_item(id):
