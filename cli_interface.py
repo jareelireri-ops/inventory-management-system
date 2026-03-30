@@ -26,13 +26,13 @@ def run_cli():
                 print(f"Error connecting to API: {e}")
 
         elif choice == "2":
-            # GET /inventory/lookup/<barcode>
+            #Get barcode input and call external API
             barcode = input("Enter the product barcode (e.g., 7622300744656): ")
             response = requests.get(f"{BASE_URL}/lookup/{barcode}")
             print(response.json())
 
         elif choice == "3":
-            # PATCH /inventory/<id>
+            # patch the product details
             item_id = input("Enter Item ID to update: ")
             qty = input("New Quantity (leave blank to skip): ")
             price = input("New Price (leave blank to skip): ")
