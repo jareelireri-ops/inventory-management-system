@@ -1,89 +1,61 @@
 # Inventory Management System
 
-A REST API built with Flask for a small retail company. Employees can manage inventory items through the API or through a CLI admin portal. The system also connects to the OpenFoodFacts API to pull real product data by barcode and add it directly to the inventory.
+Built this as a backend API for managing store inventory. The idea was simple — a retail company needs to track their products, so I built endpoints to handle all of that plus hooked it up to the OpenFoodFacts API so you can look up a real product by barcode and it gets added to the inventory automatically.
+
+Also built a CLI admin portal so you don't have to use Postman every time you want to interact with the API.
 
 ---
 
-## Setup
+## How to run it
 
-**1. Clone the repo and navigate into it**
-```bash
-git clone <your-repo-link>
-cd inventory-management-system
-```
-
-**2. Install dependencies**
+First install the dependencies:
 ```bash
 pip install flask requests
 ```
 
-**3. Run the API**
+Then start the API:
 ```bash
 python app.py
 ```
-Runs at `http://127.0.0.1:5000`
 
-**4. Run the Admin Portal** (in a separate terminal while the API is running)
+Open a second terminal and run the admin portal:
 ```bash
 python cli_interface.py
 ```
 
-**5. Run Tests**
+To run the tests:
 ```bash
 python testing.py
 ```
 
 ---
 
-## API Endpoints
+## Endpoints
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/` | Welcome message |
-| GET | `/inventory` | Get all inventory items |
-| GET | `/inventory/<id>` | Get a single item by ID |
-| POST | `/inventory` | Add a new item |
-| PATCH | `/inventory/<id>` | Update an item's price or quantity |
-| DELETE | `/inventory/<id>` | Delete an item |
-| GET | `/inventory/lookup/<barcode>` | Fetch product from OpenFoodFacts and add to inventory |
+- `GET /inventory` — returns everything in the inventory
+- `GET /inventory/<id>` — get one item by its ID
+- `POST /inventory` — add a new item
+- `PATCH /inventory/<id>` — update price or quantity of an item
+- `DELETE /inventory/<id>` — remove an item
+- `GET /inventory/lookup/<barcode>` — looks up a product on OpenFoodFacts by barcode and adds it to the inventory
 
 ---
 
-## CLI Admin Portal
+## The CLI
 
-The CLI lets you interact with the API without needing Postman or a browser. Options include:
-
-1. View full inventory
-2. Lookup a product by barcode (calls OpenFoodFacts and adds it to inventory)
-3. Update a product's price or quantity
-4. Delete a product
-5. Exit
+The CLI runs against the live API. You get a simple menu where you can view inventory, look up a barcode, update something, or delete an item. Easier than hitting endpoints manually while testing.
 
 ---
 
-## Project Structure
+## What's in the repo
 
-```
-inventory-management-system/
-├── app.py              # Flask app and all routes
-├── external_api.py     # OpenFoodFacts integration
-├── cli_interface.py    # CLI admin portal
-├── testing.py          # Unit tests
-└── README.md
-```
+- `app.py` — the Flask app and all the routes
+- `external_api.py` — handles the OpenFoodFacts API call
+- `cli_interface.py` — the admin CLI
+- `testing.py` — unit tests
 
 ---
 
-## Features
-
-- Full CRUD operations on inventory
-- Real-time product lookup by barcode via OpenFoodFacts
-- Fetched products are automatically added to the inventory array
-- CLI interface for admin use without a frontend
-- Unit tests covering endpoints and external API integration
-
----
-
-## developer
+## DEVELOPER
 
 Jareel Ireri — [@jareelireri-ops](https://github.com/jareelireri-ops)
